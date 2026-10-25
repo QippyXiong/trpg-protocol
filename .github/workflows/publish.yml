@@ -1,0 +1,30 @@
+name: Publish private protocol package
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@xiong'
+      - name: Verify owner and private repository
+        env:
+          REPO_PRIVATE: ${{ github.event.repository.private }}
+        run: |
+          node --input-type=module -e 'import fs from "node:fs"; const p=JSON.parse(fs.readFileSync("package.json")); const owner=process.env.GITHUB_REPOSITORY_OWNER.toLowerCase(); if(p.name.split("/")[0]!=="@"+owner || process.env.REPO_PRIVATE!=="true") throw Error("Private repository and matching scope required");'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - run: git diff --exit-code -- dist
+      - name: Bind package to this repository
+        run: |
+          node --input-type=module -e 'import fs from "node:fs"; const p=JSON.parse(fs.readFileSync("package.json")); p.repository={type:"git",url:"git+https://github.com/"+process.env.GITHUB_REPOSITORY+".git"}; fs.writeFileSync("package.json",JSON.stringify(p,null,2)+"\n");'
+      - run: npm publish --registry=https://npm.pkg.github.com
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}

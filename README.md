@@ -33,10 +33,16 @@ npm test
 npm pack
 ```
 
-发布目的地、scope 权限和可见性尚待所有者确认，因此尚未发布。确认后可将本包单独发布到 npm/private registry，或使用所有者给出的 Git 地址及明确标签。不得把相对 file: 路径写入正式消费依赖。
+已选择私有GitHub Packages；实际仓库地址与scope权限仍待核验，因此尚未发布。确认后可将本包单独发布到 npm/private registry，或使用所有者给出的 Git 地址及明确标签。不得把相对 file: 路径写入正式消费依赖。
 
 私有 registry 由 .npmrc 或环境配置，不写 token 入库。发布后在三个消费者运行 npm install、npm run protocol:check，并提交安装生成的 package-lock.json。当前仅用真实 tgz 进行本地安装验证，正式 registry 的锁文件尚未伪造或提前生成。
 
 版本变更需同步 package.json 与 routes.ts 的版本常量；构建会检查一致。破坏性变更升级主版本；0.x 期间升级次版本。业务实现始终留在 trpg-server。
 
 编译产物dist随独立Git仓库提交，方便固定标签的Git依赖；CI重新构建并校验产物，防止手改产物。三个TS文件是唯一源码。
+
+## GitHub Packages 发布方案
+
+已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @xiong 对应；当前尚未拿到远程地址，未推送或发布。
+
+协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@xiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
