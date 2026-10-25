@@ -1,30 +1,42 @@
-# trpg-protocol
+# @xiong/trpg-protocol
 
-三个项目共用的 npm 协议包（当前 0.1.0），Node.js 22+。API 路由、事件种类与文案、可见性、TypeScript 类型和 JSON Schema 统一在这里维护。包不包含故事规则、鉴权凭据、数据库模型或伤害判定。
+版本 **0.1.0**。独立发布的 npm 契约包，Node.js 22+；运行时无第三方依赖。
 
-## 消费
+源码只有三个文件：
 
-当前三个源码仓库用 `file:../trpg-protocol` 作为共同依赖，四个仓库放在同一父目录；发布或 GitHub 地址确定后可改为明确版本。尚未发布 npm registry，包名可用性尚未核验。
+- `src/types.ts`：事件结构、行动字段、字段枚举。
+- `src/errors.ts`：错误码与错误响应类型。
+- `src/routes.ts`：API 路径、HTTP 方法和协议版本。
 
-在 trpg-server / trpg-web / trpg-cli 分别运行：
+不包含骰子、血量、物品效果、结局判断、鉴权实现、事件校验函数或服务端路由分发逻辑。包内 `dist/` 是这三个文件生成的 JS、类型声明、JSON 和浏览器常量；构建脚本不随包发布。
 
-```sh
-npm install --ignore-scripts --no-audit --no-fund
-npm run protocol:sync
-npm run protocol:check
+## 使用
+
+发布后各消费者声明精确依赖：
+
+```json
+{"dependencies":{"@xiong/trpg-protocol":"0.1.0"}}
 ```
 
-网页消费生成的 `static/protocol.js`；Python 运行时读取生成的 `protocol.json`，CLI 打包也包含此 JSON。生成文件提交 Git，使 Python 运行不依赖 Node；但不得手改。`protocol.lock.json` 保存版本与源文件 SHA-256，check 对内容逐字校验。直接 npm 使用可 `import {apiPath, EVENT_LABELS, isEvent} from 'trpg-protocol'`，另有 TypeScript 类型及 JSON Schema。
+```ts
+import {ROUTES, ERROR_CODES} from '@xiong/trpg-protocol';
+import type {RoomEvent, PreparedAction} from '@xiong/trpg-protocol/types';
+```
 
-## 开发与打包
+服务端和 CLI 从包的 `contract.json` 导出构建期 JSON，网页使用生成的常量，运行时均无需跨仓库目录。三端本地同步脚本是构建适配，不属于协议包。其 protocol.lock.json 检查版本与内容哈希。
+
+## 构建与独立发布
 
 ```sh
+npm ci --ignore-scripts
 npm test
 npm pack
 ```
 
-JSON Schema 描述传输结构，不替代服务端权限、顺序、超时或 DM 判断。`PreparedAction` 是新规则行动的结构，旧版兼容由服务端保留。`isEvent` 是轻量类型守卫，不是完整 JSON Schema 验证器。外部消费不应把未知未来事件默默删掉。
+发布目的地、scope 权限和可见性尚待所有者确认，因此尚未发布。确认后可将本包单独发布到 npm/private registry，或使用所有者给出的 Git 地址及明确标签。不得把相对 file: 路径写入正式消费依赖。
 
-契约变更在本仓库提交，提高版本，三个消费端更新依赖并同步锁文件，跑集成测试。破坏性变更升级主版本；0.x 阶段升级次版本。消费端当前仅接受0.1.x，升级0.2需明确修改兼容声明。已安装的 Python 包需重新构建安装，不能只改源码外的 JSON。
+私有 registry 由 .npmrc 或环境配置，不写 token 入库。发布后在三个消费者运行 npm install、npm run protocol:check，并提交安装生成的 package-lock.json。当前仅用真实 tgz 进行本地安装验证，正式 registry 的锁文件尚未伪造或提前生成。
 
-GitHub 三端工作流默认从同一所有者的 trpg-protocol 仓库检出契约；若它是私有仓库，需提供只读 PROTOCOL_READ_TOKEN，否则默认单仓库 token 可能无法读取。
+版本变更需同步 package.json 与 routes.ts 的版本常量；构建会检查一致。破坏性变更升级主版本；0.x 期间升级次版本。业务实现始终留在 trpg-server。
+
+编译产物dist随独立Git仓库提交，方便固定标签的Git依赖；CI重新构建并校验产物，防止手改产物。三个TS文件是唯一源码。

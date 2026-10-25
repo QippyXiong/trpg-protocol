@@ -1,32 +1,42 @@
 {
-  "name": "trpg-protocol",
+  "name": "@xiong/trpg-protocol",
   "version": "0.1.0",
-  "description": "Shared NightTable HTTP routes, event contracts and schemas",
+  "description": "Versioned transport contracts for TRPG server and clients",
   "type": "module",
-  "main": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./dist/routes.js",
+  "types": "./dist/routes.d.ts",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "import": "./index.js"
+      "types": "./dist/routes.d.ts",
+      "import": "./dist/routes.js"
     },
-    "./contract.json": "./contract.json",
-    "./schemas/*": "./schemas/*"
-  },
-  "bin": {
-    "trpg-protocol-sync": "./scripts/sync.js"
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "import": "./dist/errors.js"
+    },
+    "./routes": {
+      "types": "./dist/routes.d.ts",
+      "import": "./dist/routes.js"
+    },
+    "./contract.json": "./dist/contract.json",
+    "./browser": "./dist/protocol.js"
   },
   "files": [
-    "index.js",
-    "index.d.ts",
-    "contract.json",
-    "schemas",
-    "scripts/sync.js",
+    "dist",
+    "src",
     "README.md"
   ],
   "scripts": {
-    "test": "node --test",
-    "check": "node --test"
+    "build": "tsc -p tsconfig.json && node scripts/emit.mjs",
+    "test": "npm run build && node --test",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=22"
