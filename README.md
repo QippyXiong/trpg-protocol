@@ -11,9 +11,13 @@
 不包含骰子、血量、物品效果、结局判断、鉴权实现、事件校验函数或服务端路由分发逻辑。包内 `dist/` 是这三个文件生成的 JS、类型声明、JSON 和浏览器常量；构建脚本不随包发布。
 
 
-## 尚未发布与本地联调
+## 发布状态
 
-本包尚未发布，应用仓库不能直接从registry安装0.1.0。源码clone后先运行 `npm ci --ignore-scripts --no-audit --no-fund`，再运行 `npm pack`，将生成的 `qippyxiong-trpg-protocol-0.1.0.tgz` 临时安装到三个应用仓库。三个应用README开头均给出了完整安装、同步和发布后切回版本号的命令。临时file依赖不得代替正式固定版本配置提交。
+已发布 **@qippyxiong/trpg-protocol@0.1.0** 到私有GitHub Packages，仓库为 https://github.com/QippyXiong/trpg-protocol 。真实registry查询与三个应用的空缓存安装已通过，不能把它与跨仓库Actions授权混为一项。
+
+三个应用CI当前返回 `permission_denied: read_package`，需在 https://github.com/users/QippyXiong/packages/npm/package/trpg-protocol/settings 的 Manage Actions access 给三个仓库授予Read，再重跑验证。无需向群里提供token。
+
+本地开发可 `npm ci --ignore-scripts` 后 `npm pack`；正式消费使用已发布的固定版本，不需要协议源码相邻检出。
 
 ## 使用
 
@@ -38,7 +42,7 @@ npm test
 npm pack
 ```
 
-已选择私有GitHub Packages；实际仓库地址与scope权限仍待核验，因此尚未发布。确认后可将本包单独发布到 npm/private registry，或使用所有者给出的 Git 地址及明确标签。不得把相对 file: 路径写入正式消费依赖。
+实际账号已核验为QippyXiong，0.1.0已发布为private，只使用GitHub Packages，不发布npm公网。不得把相对 file: 路径写入正式消费依赖。
 
 私有 registry 由 .npmrc 或环境配置，不写 token 入库。发布后在三个消费者运行 npm install、npm run protocol:check，并提交安装生成的 package-lock.json。当前仅用真实 tgz 进行本地安装验证，正式 registry 的锁文件尚未伪造或提前生成。
 
@@ -48,6 +52,6 @@ npm pack
 
 ## GitHub Packages 发布方案
 
-已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @qippyxiong 对应；当前尚未拿到远程地址，未推送或发布。
+已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际所有者已核验为QippyXiong，仓库已推送，协议包0.1.0已发布为private。
 
 协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@qippyxiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
