@@ -1,0 +1,35 @@
+{
+  "name": "trpg-protocol",
+  "version": "0.1.0",
+  "description": "Shared NightTable HTTP routes, event contracts and schemas",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js"
+    },
+    "./contract.json": "./contract.json",
+    "./schemas/*": "./schemas/*"
+  },
+  "bin": {
+    "trpg-protocol-sync": "./scripts/sync.js"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "contract.json",
+    "schemas",
+    "scripts/sync.js",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "check": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "UNLICENSED"
+}
