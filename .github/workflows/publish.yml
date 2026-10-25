@@ -28,3 +28,7 @@ jobs:
       - run: npm publish --registry=https://npm.pkg.github.com
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
+      - name: Verify published version is readable
+        run: npm view @xiong/trpg-protocol@0.1.0 version --registry=https://npm.pkg.github.com --prefer-online
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
