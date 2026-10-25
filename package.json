@@ -1,6 +1,6 @@
 {
   "name": "@qippyxiong/trpg-protocol",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Versioned transport contracts for TRPG server and clients",
   "type": "module",
   "main": "./dist/routes.js",
@@ -28,7 +28,8 @@
   "files": [
     "dist",
     "src",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json && node scripts/emit.mjs",
@@ -41,7 +42,7 @@
   "engines": {
     "node": ">=22"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },

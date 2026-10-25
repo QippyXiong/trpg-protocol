@@ -1,5 +1,5 @@
 /** Versioned transport paths. No dispatch or decision logic. */
-export declare const PROTOCOL_VERSION = "0.1.0";
+export declare const PROTOCOL_VERSION = "0.1.1";
 export declare const API_PREFIX = "/api/";
 export declare const ROUTES: {
     readonly "action/retract": {

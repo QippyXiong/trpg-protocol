@@ -1,4 +1,4 @@
-name: Publish private protocol package
+name: Publish protocol package
 on:
   workflow_dispatch:
 permissions:
@@ -14,11 +14,9 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@qippyxiong'
-      - name: Verify owner and private repository
-        env:
-          REPO_PRIVATE: ${{ github.event.repository.private }}
+      - name: Verify package owner
         run: |
-          node --input-type=module -e 'import fs from "node:fs"; const p=JSON.parse(fs.readFileSync("package.json")); const owner=process.env.GITHUB_REPOSITORY_OWNER.toLowerCase(); if(p.name.split("/")[0]!=="@"+owner || process.env.REPO_PRIVATE!=="true") throw Error("Private repository and matching scope required");'
+          node --input-type=module -e 'import fs from "node:fs"; const p=JSON.parse(fs.readFileSync("package.json")); const owner=process.env.GITHUB_REPOSITORY_OWNER.toLowerCase(); if(p.name.split("/")[0]!=="@"+owner) throw Error("Matching package scope required");'
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm test
       - run: git diff --exit-code -- dist
@@ -29,6 +27,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
       - name: Verify published version is readable
-        run: npm view @qippyxiong/trpg-protocol@0.1.0 version --registry=https://npm.pkg.github.com --prefer-online
+        run: npm view @qippyxiong/trpg-protocol@$(node -p "require('./package.json').version") version --registry=https://npm.pkg.github.com --prefer-online
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}

@@ -1,5 +1,5 @@
 /** Versioned transport paths. No dispatch or decision logic. */
-export const PROTOCOL_VERSION = '0.1.0';
+export const PROTOCOL_VERSION = '0.1.1';
 export const API_PREFIX = '/api/';
 export const ROUTES = {
     "action/retract": {
