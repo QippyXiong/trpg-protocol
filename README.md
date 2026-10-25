@@ -26,3 +26,13 @@ npm pack
 版本变更需同时更新package.json和routes.ts；构建会检查一致。0.1.1补充MIT许可及发布配置，传输字段不变。Python客户端使用包生成的JSON，运行时不依赖Node。
 
 GitHub Packages中的包可见性独立于仓库，必须分别核验；发布工作流支持公开仓库且仅验证实际owner/scope匹配。
+
+## 公开下载
+
+[v0.1.1 Release](https://github.com/QippyXiong/trpg-protocol/releases/tag/v0.1.1)提供可匿名下载的MIT npm压缩包：
+
+```sh
+npm install https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz
+```
+
+它与已发布的0.1.1包内容一致；源码与Release公开不自动更改GitHub Packages自身的包可见性。
