@@ -1,4 +1,4 @@
-# @xiong/trpg-protocol
+# @qippyxiong/trpg-protocol
 
 版本 **0.1.0**。独立发布的 npm 契约包，Node.js 22+；运行时无第三方依赖。
 
@@ -13,19 +13,19 @@
 
 ## 尚未发布与本地联调
 
-本包尚未发布，应用仓库不能直接从registry安装0.1.0。源码clone后先运行 `npm ci --ignore-scripts --no-audit --no-fund`，再运行 `npm pack`，将生成的 `xiong-trpg-protocol-0.1.0.tgz` 临时安装到三个应用仓库。三个应用README开头均给出了完整安装、同步和发布后切回版本号的命令。临时file依赖不得代替正式固定版本配置提交。
+本包尚未发布，应用仓库不能直接从registry安装0.1.0。源码clone后先运行 `npm ci --ignore-scripts --no-audit --no-fund`，再运行 `npm pack`，将生成的 `qippyxiong-trpg-protocol-0.1.0.tgz` 临时安装到三个应用仓库。三个应用README开头均给出了完整安装、同步和发布后切回版本号的命令。临时file依赖不得代替正式固定版本配置提交。
 
 ## 使用
 
 发布后各消费者声明精确依赖：
 
 ```json
-{"dependencies":{"@xiong/trpg-protocol":"0.1.0"}}
+{"dependencies":{"@qippyxiong/trpg-protocol":"0.1.0"}}
 ```
 
 ```ts
-import {ROUTES, ERROR_CODES} from '@xiong/trpg-protocol';
-import type {RoomEvent, PreparedAction} from '@xiong/trpg-protocol/types';
+import {ROUTES, ERROR_CODES} from '@qippyxiong/trpg-protocol';
+import type {RoomEvent, PreparedAction} from '@qippyxiong/trpg-protocol/types';
 ```
 
 服务端和 CLI 从包的 `contract.json` 导出构建期 JSON，网页使用生成的常量，运行时均无需跨仓库目录。三端本地同步脚本是构建适配，不属于协议包。其 protocol.lock.json 检查版本与内容哈希。
@@ -48,6 +48,6 @@ npm pack
 
 ## GitHub Packages 发布方案
 
-已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @xiong 对应；当前尚未拿到远程地址，未推送或发布。
+已选择私有 GitHub Packages，scope 映射在 .npmrc，发布 registry 被限定为 https://npm.pkg.github.com。实际仓库所有者必须与 @qippyxiong 对应；当前尚未拿到远程地址，未推送或发布。
 
-协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@xiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。
+协议仓库的 Publish private protocol package 工作流只可手动触发，先核验私有仓库及scope，再测试、绑定实际仓库URL并发布；新包按GitHub默认保持private，不添加public发布选项。三端CI具备packages:read，仍须在包的Actions访问设置中授予这些私有仓库读取权限，或配置只读NPM_READ_TOKEN。本机可通过npm login --scope=@qippyxiong --auth-type=legacy --registry=https://npm.pkg.github.com认证，token只在本机输入，不入库或群聊。

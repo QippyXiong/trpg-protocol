@@ -1,5 +1,5 @@
 {
-  "name": "@xiong/trpg-protocol",
+  "name": "@qippyxiong/trpg-protocol",
   "version": "0.1.0",
   "description": "Versioned transport contracts for TRPG server and clients",
   "type": "module",
@@ -44,5 +44,9 @@
   "license": "UNLICENSED",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QippyXiong/trpg-protocol.git"
   }
 }

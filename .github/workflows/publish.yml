@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 22
           registry-url: https://npm.pkg.github.com
-          scope: '@xiong'
+          scope: '@qippyxiong'
       - name: Verify owner and private repository
         env:
           REPO_PRIVATE: ${{ github.event.repository.private }}
@@ -29,6 +29,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
       - name: Verify published version is readable
-        run: npm view @xiong/trpg-protocol@0.1.0 version --registry=https://npm.pkg.github.com --prefer-online
+        run: npm view @qippyxiong/trpg-protocol@0.1.0 version --registry=https://npm.pkg.github.com --prefer-online
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
