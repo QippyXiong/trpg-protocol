@@ -1,19 +1,31 @@
 # @qippyxiong/trpg-protocol
 
-MIT 开源的传输契约，当前版本 **0.1.1**。Node.js 22+，无运行时第三方依赖。
+MIT 开源传输契约，版本 **0.1.1**。Node.js 22+，无运行时第三方依赖。
 
-唯一源码为 `src/types.ts`（事件与字段类型）、`src/errors.ts`（HTTP错误码）、`src/routes.ts`（路径、方法、版本）。不包含血量、骰子、物品或结局等业务判断。
+源码仅 `src/types.ts`（结构和枚举）、`src/errors.ts`（HTTP错误码）、`src/routes.ts`（路径、方法、版本）。不包含业务实现。
 
-## 使用
+## 发布状态与安装
 
-```ts
-import {ROUTES, ERROR_CODES} from '@qippyxiong/trpg-protocol';
-import type {RoomEvent} from '@qippyxiong/trpg-protocol/types';
+源码与 [v0.1.1 Release](https://github.com/QippyXiong/trpg-protocol/releases/tag/v0.1.1)已经公开，GitHub Packages也有此前发布的版本。**npm官方registry的0.1.1尚未发布**：当前本机npmjs认证缺失，正在等待账号登录及scope权限。不要把GitHub Packages已发布混同于npmjs已发布。
+
+已将publishConfig、scope映射和发布工作流切至 `https://registry.npmjs.org`，并显式配置 `access: public`。GitHub Token不作为npmjs发布凭据。
+
+发布完成后，普通用户不需要GitHub配置：
+
+```sh
+npm install @qippyxiong/trpg-protocol@0.1.1
 ```
 
-包保留在GitHub Packages，公开源码不代表匿名npm安装：GitHub的npm registry仍需认证。`.npmrc`仅含scope映射；凭据存用户配置或Actions Secrets，不提交Git。源码仓库可公开clone，MIT许可证见[LICENSE](LICENSE)。
+发布前可匿名下载Release压缩包并本地安装：
 
-## 开发
+```sh
+curl --fail --location --proto '=https' -o protocol.tgz https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz
+npm install ./protocol.tgz
+```
+
+Release是此前GitHub Packages发布物的副本；它携带的旧registry元数据不代表新npmjs发布目标，勿将这个旧tgz直接当成npmjs发布候选。
+
+## 开发和发布
 
 ```sh
 npm ci --ignore-scripts
@@ -21,18 +33,6 @@ npm test
 npm pack
 ```
 
-构建产物dist随Git提交并由CI重建核对。打包文件仅包含声明的契约、类型、README和LICENSE；tgz与node_modules不提交。
+发布前先在本机 `npm login --registry=https://registry.npmjs.org` 并确认拥有 `@qippyxiong` 用户或组织scope，再执行 `npm publish --registry=https://registry.npmjs.org --access=public`。CI发布需在仓库Secrets配置具有npm发布权限的NPM_TOKEN；不要把凭据放到源码、群聊或问题记录里。
 
-版本变更需同时更新package.json和routes.ts；构建会检查一致。0.1.1补充MIT许可及发布配置，传输字段不变。Python客户端使用包生成的JSON，运行时不依赖Node。
-
-GitHub Packages中的包可见性独立于仓库，必须分别核验；发布工作流支持公开仓库且仅验证实际owner/scope匹配。
-
-## 公开下载
-
-[v0.1.1 Release](https://github.com/QippyXiong/trpg-protocol/releases/tag/v0.1.1)提供可匿名下载的MIT npm压缩包：
-
-```sh
-npm install https://github.com/QippyXiong/trpg-protocol/releases/download/v0.1.1/qippyxiong-trpg-protocol-0.1.1.tgz
-```
-
-它与已发布的0.1.1包内容一致；源码与Release公开不自动更改GitHub Packages自身的包可见性。
+历史和当前文件（含ignored文件及tgz成员）已重新执行凭据模式扫描，未发现命中；这不是对所有潜在秘密的绝对保证。LICENSE、发布内容白名单和完整性检查都保留。dist产物与版本常量由构建核对。
